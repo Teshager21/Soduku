@@ -1,0 +1,22 @@
+'What are ther rules
+1. No number should be repeated in any row or column 1-9
+2. No number should be repeated in any block 1-9
+3. 30-40 of the cells of the 81 are filled
+
+-Two tables should be displayed one showing the position index to choose , the other one the real playing table
+ an array of arrays can be used 3 x 3 x (3x3)
+
+ ALGORITHM
+-create an empty array[3][3][3];
+
+-randomly populate 30-40 of the the array elemets with random numbers
+
+-write a display function that renders the table based on the values in the array --colorcode the originally filled cells
+
+-prompt and receive number(1-9) from keyboard while there is still an empty element in the array
+-evaluate against the rule and either  write  it in the array based on its value and index or flag error (write a function that evaluates against the rule)
+-clear screen and redraw the table
+-declare win if all cells are filled and restart
+
+EDITING
+-if a player wishes to change the value of the originallyEmpty cells , should be able to do so
