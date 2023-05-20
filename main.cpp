@@ -9,13 +9,14 @@ void generateFilledPositions(int (&filledPositions)[],const int filledCells);
 void populateInitialCells(int (&tableArray)[3][3][3][3],const int filledCells,int filledPositions[]);
 void renderTables(int tableArray[3][3][3][3],int filledPositions[],const int filledCells);
 bool isItRepeated(std::string scope,int scopeSpecifier,double value,int (&tableArray)[3][3][3][3]);
-void receiveInput(int (&tableArray)[3][3][3][3],int position,int value);
+void receiveInput(int (&tableArray)[3][3][3][3],int position,int value, std::string& messages);
 bool checkSelectedPosition(int selectedPosition, int filledPositions[],int filledCells);
 bool isgameWon(int tableArray[3][3][3][3]);
 
 int main(){
 int tableArray[3][3][3][3];
 int selectedPos=0,selectedPosition=0,selectedValue=0;
+std::string messages;
 
 //intialize the array
 for(int i=0; i<3;i++){
@@ -31,45 +32,33 @@ for(int i=0; i<3;i++){
 //decide the number of items to be filled 
 const int filledCells=generateNumberofFilledCells();
 int filledPositions[filledCells];
-std::cout<<filledCells<<std::endl;
 generateFilledPositions(filledPositions,filledCells);
 populateInitialCells(tableArray,filledCells,filledPositions);
 renderTables(tableArray,filledPositions,filledCells);
 
 //Prompt users for input
-do{ 
-    std::cout<<"Press e to exit"<<std::endl;
-    std::cout<<"Choose the cell to change: ";
-    std::cin>>selectedPos;
-    selectedPosition= static_cast<int>(selectedPos);
+do{ if (messages!=""){
+     std::cout<<std::endl<<"\033[1;31m"<<messages<<std::endl;
+     }
+    std::cout<<"\033[1;32m Press e to exit"<<std::endl;
+    std::cout<<"\033[1;32m Choose the cell to change: ";
+    std::cin>>selectedPosition;
     std::cout<<"Choose the value you would to insert: ";
     std::cin>>selectedValue;
     if(checkSelectedPosition(selectedPosition,filledPositions,filledCells)){
-       receiveInput(tableArray,selectedPosition,selectedValue);
+       receiveInput(tableArray,selectedPosition,selectedValue,messages);
     }else {
-        std::cout<<"Cell not available!"<<std::endl;
-        std::cout<<"filled cells!"<<filledCells<<std::endl;
-        //break;
+        messages = "Cell not available!";
      }
-    
     system("CLS");
     renderTables(tableArray,filledPositions,filledCells);
-    //std::cout<<"you did good! "<<selectedPosition;
 } while( selectedPosition!=90  && isgameWon(tableArray)==false);
 
 if(isgameWon(tableArray)){
     std::cout<<std::endl<<"CONGRATULATIONS, YOU HAVE SUCCESSFULLY COMPLETED THE GAME!"<<std::endl;
 }
-if(selectedValue==0){
-    std::cout<<std::endl<<"HAVE A NICE DAY!"<<std::endl;
-}
 
 }
-
-
-
-
-
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                                FUNCTION
@@ -78,7 +67,6 @@ if(selectedValue==0){
 int generateNumberofFilledCells(){
     srand(time(NULL));
 int filledCells= rand()%11+30;
-
 return filledCells;
 }
 
@@ -106,12 +94,6 @@ for( int i=0; i<filledCells;i++){
 //======================================================================================
 
 void populateInitialCells(int (&tableArray)[3][3][3][3],const int filledCells,int filledPositions[]){
-
-     // print oout the filled positions
-                    std::cout<<std::endl<<"filled cells include: ";
-                    for(int q=0 ;q<filledCells;q++){
-                        std::cout<<filledPositions[q]<<", ";
-                    }
  srand(time(NULL));
   int* start =filledPositions;
   int* finish=filledPositions + filledCells*sizeof(int);
@@ -122,14 +104,11 @@ int pos=0;
                 for(int l=0; l<3;l++){
                     pos=27*i+9*k+3*j+l;
                     auto exists= std::find(start,finish,pos);
-                    std::cout<<std::endl;
-                   // std:: cout<<"we did: "<<i<<j<<k<<l<<" pos: "<<pos<<" exists "<<(exists!=finish)<<" filled cells "<<filledCells<<std::endl;
                     for(int a=0;a<filledCells;a++){
                     if(filledPositions[a]==pos){
                         int fill;
                         do{
                             fill=rand() % 9 + 1;
-                            //std::cout<<"been here fill:"<<fill<<" "<<i<<","<<j<<","<<k<<","<<l<<" repetead? "<<isItRepeated("row",i*3+k,fill,tableArray)<<isItRepeated("col",j*3+l,fill,tableArray)<<" row:"<<i*3+k<<" col:"<<j*3+l<<std::endl;
                         } while(isItRepeated("row",i*3+k,fill,tableArray) || isItRepeated("col",j*3+l,fill,tableArray)|| isItRepeated("block",i*3+j,fill,tableArray));
                        
                           tableArray[i][j][k][l] = fill;
@@ -173,7 +152,6 @@ void renderTables(int tableArray[3][3][3][3],int filledPositions[],int filledCel
                             std::cout<<"\033[1;34m"<< tableArray[i][j][k][l]<<"\033[0m  |  ";   
                             }  
                     } else {
-                        //std::cout<<"selected Position red: "<<selectedPosition<<" : "<<checkSelectedPosition(selectedPosition,filledPositions,filledCells)<<" ";
                          if( tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && colcounter%3==0 && colcounter>2){
                         
                             std::cout<<"\033[1;31m"<< tableArray[i][j][k][l]<<"\033[1;33m  |  ";
@@ -181,7 +159,6 @@ void renderTables(int tableArray[3][3][3][3],int filledPositions[],int filledCel
                             if(tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && colcounter%3!=0 && colcounter>2){
                             std::cout<<"\033[1;31m"<< tableArray[i][j][k][l]<<"\033[0m  |  ";   
                             }  
-
                     }
                 }   
             }
@@ -216,7 +193,6 @@ if (scope=="row"){
                        rowElem = rowElem +"["+std::to_string(scopeSpecifier)+"]"+ ", " + std::to_string(tableArray[i][j][k][l])+"("+std::to_string(i) + std::to_string(j)+std::to_string(k)+std::to_string(l)+")";
                         if(value==tableArray[i][j][k][l]){
                             return true;
-                            //std::cout<<"the row elements were "<<rowElem<<"from repetead! row="<<scopeSpecifier;
                         }
                     }
                    
@@ -267,7 +243,7 @@ if (scope=="block"){
 
 //================================================================================
 
-void receiveInput(int (&tableArray)[3][3][3][3],int position,int value){
+void receiveInput(int (&tableArray)[3][3][3][3],int position,int value, std::string& messages){
 int i,j,k,l;
 l=position%3;
 if(position<27){
@@ -285,11 +261,11 @@ if(position>53 && position<81){
 }
     j=(position-27*i-9*k-1)/3;
 if(isItRepeated("row",i*3+k,value,tableArray) || isItRepeated("col",j*3+l,value,tableArray)|| isItRepeated("block",i*3+j,value,tableArray)){
-    std::cout<<"Repetition, please use another value"<<std::endl;
+    messages="Repetition, please use another value!";
 }else{
     tableArray[i][j][k][l]=value;
+    messages="";
 }
-//std::cout<<"the coordinates of :"<<position<<" are: "<<i<<", "<<j<<", "<<k<<", "<<l<<std::endl;
 }
 
 //===========================================================================================
