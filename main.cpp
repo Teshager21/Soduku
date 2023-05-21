@@ -40,7 +40,7 @@ renderTables(tableArray,filledPositions,filledCells);
 do{ if (messages!=""){
      std::cout<<std::endl<<"\033[1;31m"<<messages<<std::endl;
      }
-    std::cout<<"\033[1;32m Press e to exit"<<std::endl;
+    std::cout<<"\033[1;32m Press ctrl+c to exit"<<std::endl;
     std::cout<<"\033[1;32m Choose the cell to change: ";
     std::cin>>selectedPosition;
     std::cout<<"Choose the value you would to insert: ";
@@ -57,7 +57,6 @@ do{ if (messages!=""){
 if(isgameWon(tableArray)){
     std::cout<<std::endl<<"CONGRATULATIONS, YOU HAVE SUCCESSFULLY COMPLETED THE GAME!"<<std::endl;
 }
-
 }
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -125,8 +124,8 @@ int pos=0;
 //===============================================================================================================================
 
 void renderTables(int tableArray[3][3][3][3],int filledPositions[],int filledCells){
-        std::cout<<"\n\033[1;33m===========================================================";
-        std::cout<<"              =========================================================== "<<std::endl;
+        std::cout<<"\n\033[1;33m========================================================";
+        std::cout<<"                ======================================================== "<<std::endl;
     int counter=0,colcounter=0;
     for(int i=0; i<3;i++){
         for(int k=0;k<3;k++){
@@ -164,25 +163,115 @@ void renderTables(int tableArray[3][3][3][3],int filledPositions[],int filledCel
             }
                      counter=counter+1;
                     if(counter%3==0 && counter>1){
-                        std::cout<<"\033[1;30m                 "<< colcounter-9<<"  |  "<<colcounter-8<<"  |  "<<colcounter-7<<"\033[1;33m |  "<<"\033[1;30m"<<colcounter-6<<"  |  "<<colcounter-5<<"  |  "<<colcounter-4<<"\033[1;33m  |  "<<"\033[1;30m"<<colcounter-3<<"  |  "<<colcounter-2<<" | "<<colcounter-1<<"\033[1;33m | "<<std::endl;
-                        std::cout<<"\033[1;33m"<<"============================================================";
-                        std::cout<<"             ==========================================================="<<std::endl;
-
+                        std::cout<<"\033[1;30m                 ";
+                       if(checkSelectedPosition(colcounter-9,filledPositions,filledCells)){
+                           std::cout<<"\033[1;32m"<<colcounter-9<<"  |  ";
+                       }else{
+                        std::cout<<"\033[1;30m"<<colcounter-9<<"\033[1;30m  |  ";
+                       }
+                        if(checkSelectedPosition(colcounter-8,filledPositions,filledCells)){
+                          std::cout<<"\033[1;32m"<<colcounter-8<<"\033[1;30m  |  ";  
+                        }else{
+                            std::cout<<"\033[1;30m"<<colcounter-8<<"\033[1;30m  |  ";  
+                        }
+                        //std::cout<<colcounter-8<<"  |  ";
+                        if(checkSelectedPosition(colcounter-7,filledPositions,filledCells)){
+                             std::cout<<"\033[1;32m"<<colcounter-7<<"\033[1;33m |  "<<"\033[1;30m";
+                         }else{
+                            std::cout<<"\033[1;30m"<<colcounter-7<<"\033[1;33m |  "<<"\033[1;30m";
+                        }
+                         if(checkSelectedPosition(colcounter-6,filledPositions,filledCells)){
+                            std::cout<<"\033[1;32m"<<colcounter-6<<"\033[1;30m  |  ";
+                         }else{
+                             std::cout<<"\033[1;30m"<<colcounter-6<<"\033[1;30m  |  ";
+                         }
+                         if(checkSelectedPosition(colcounter-5,filledPositions,filledCells)){
+                            std::cout<<"\033[1;32m"<<colcounter-5<<"  |  ";
+                        }else{
+                             std::cout<<"\033[1;30m"<<colcounter-5<<"  |  ";
+                        }
+                        if(checkSelectedPosition(colcounter-4,filledPositions,filledCells)){
+                            std::cout<<"\033[1;32m"<<colcounter-4<<"\033[1;33m  |  "<<"\033[1;30m";
+                         }else{
+                            std::cout<<"\033[1;30m"<<colcounter-4<<"\033[1;33m  |  "<<"\033[1;30m";
+                         }
+                         if(checkSelectedPosition(colcounter-3,filledPositions,filledCells)){
+                             std::cout<<"\033[1;32m"<<colcounter-3<<"  |  ";
+                        }else{
+                             std::cout<<"\033[1;30m"<<colcounter-3<<"\033[1;30m  |  ";
+                        }
+                         if(checkSelectedPosition(colcounter-2,filledPositions,filledCells)){
+                            std::cout<<"\033[1;32m"<<colcounter-2<<" | ";
+                           }else{
+                             std::cout<<"\033[1;30m"<<colcounter-2<<"\033[1;30m | ";
+                           }
+                        if(checkSelectedPosition(colcounter-1,filledPositions,filledCells)){
+                           std::cout<<"\033[1;32m"<<colcounter-1<<"\033[1;33m | "<<std::endl;
+                         }else{
+                           std::cout<<"\033[1;30m"<<colcounter-1<<"\033[1;33m | "<<std::endl;
+                         }
+                        std::cout<<"\033[1;33m"<<"=========================================================";
+                        std::cout<<"               ========================================================"<<std::endl;
                     }else{
-                       std::cout<<"\033[1;30m                 "<< colcounter-9<<"  |  "<<colcounter-8<<"  |  "<<colcounter-7<<"\033[1;33m |  "<<"\033[1;30m"<<colcounter-6<<"  |  "<<colcounter-5<<"  |  "<<colcounter-4<<"\033[1;33m  |  "<<"\033[1;30m"<<colcounter-3<<"  |  "<<colcounter-2<<" | "<<colcounter-1<<"\033[1;33m | "<<std::endl;
-
-                   std::cout<<"\033[1;30m------------------------------------------------------------";
-                   std::cout<<"                 -------------------------------------------------------"<<std::endl;
-                    }   
+                         
+                       std::cout<<"\033[1;30m                "; 
+                       if(checkSelectedPosition(colcounter-9,filledPositions,filledCells)){
+                            std::cout<<"\033[1;32m"<<colcounter-9<<"  |  "; 
+                       }else{
+                                std::cout<<"\033[1;30m"<<colcounter-9<<"  |  "; 
+                    
+                         }
+                       if(checkSelectedPosition(colcounter-8,filledPositions,filledCells)){
+                            std::cout<<"\033[1;32m"<< colcounter-8<<"  |  ";
+                       }else{ 
+                            std::cout<<"\033[1;30m"<<colcounter-8<<"  |  "; 
+                         }
+                       if(checkSelectedPosition(colcounter-7,filledPositions,filledCells)){
+                            std::cout<<"\033[1;32m"<<colcounter-7<<"\033[1;33m |  "<<"\033[1;30m"; 
+                       }else{
+                            std::cout<<"\033[1;30m"<<colcounter-7<<"\033[1;33m |  "<<"\033[1;30m";  
+                         }
+                       if(checkSelectedPosition(colcounter-6,filledPositions,filledCells)){
+                            std::cout<<"\033[1;32m"<<colcounter-6<<"  |  "; 
+                       }else{ std::cout<<"\033[1;30m"<<colcounter-6<<"  |  "; 
+                         }
+                       if(checkSelectedPosition(colcounter-5,filledPositions,filledCells)){
+                             std::cout<<"\033[1;32m"<<colcounter-5<<"  |  ";
+                       }else{ 
+                         std::cout<<"\033[1;30m"<<colcounter-5<<"  |  "; 
+                         }
+                       if(checkSelectedPosition(colcounter-4,filledPositions,filledCells)){
+                            std::cout<<"\033[1;32m"<<colcounter-4<<"\033[1;33m  |  "<<"\033[1;30m"; 
+                       }else{
+                            std::cout<<"\033[1;30m"<<colcounter-4<<"\033[1;33m  |  "<<"\033[1;30m";
+                         }
+                       if(checkSelectedPosition(colcounter-3,filledPositions,filledCells)){
+                            std::cout<<"\033[1;32m"<<colcounter-3<<"  |  "; 
+                       }else{
+                            std::cout<<"\033[1;30m"<<colcounter-3<<"  |  "; 
+                         }
+                       if(checkSelectedPosition(colcounter-2,filledPositions,filledCells)){
+                           std::cout<<"\033[1;32m"<<colcounter-2<<" | "; 
+                       }else{
+                        std::cout<<"\033[1;30m"<<colcounter-2<<"  |  "; 
+                         }
+                       if(checkSelectedPosition(colcounter-1,filledPositions,filledCells)){
+                       std::cout<<"\033[1;32m"<<colcounter-1<<"\033[1;33m | "<<std::endl;
+                       }else{
+                        std::cout<<"\033[1;30m"<<colcounter-1<<"\033[1;33m | "<<std::endl;
+                        }
+                   std::cout<<"\033[1;30m---------------------------------------------------------";
+                   std::cout<<"                 ----------------------------------------------------"<<std::endl;
+                    }  
+        } 
                 }    
             }
-}
+//}
 
 //==============================================================================================================================
 
 bool isItRepeated(std::string scope,int scopeSpecifier,double value,int (&tableArray)[3][3][3][3]){
 std::string rowElem;
-
 if (scope=="row"){
     for(int i=0; i<3;i++){
         for(int k=0;k<3;k++){
@@ -254,7 +343,6 @@ if(position>26&&position<54){
     i=1;
     k=(position-27)/9;
 }
-
 if(position>53 && position<81){
     i=2;
     k=(position-54)/9;
