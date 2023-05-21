@@ -37,7 +37,7 @@ populateInitialCells(tableArray,filledCells,filledPositions);
 renderTables(tableArray,filledPositions,filledCells);
 
 //Prompt users for input
-  std::cout<<std::endl<<"first two elements are: "<<tableArray[0][0][0][0]<<", "<<tableArray[0][0][0][1]<<std::endl;
+  std::cout<<std::endl<<"first three elements are: "<<tableArray[0][0][0][0]<<", "<<tableArray[0][0][0][1]<<", "<<tableArray[0][0][0][2]<<std::endl;
 do{ if (messages!=""){
      std::cout<<std::endl<<"\033[1;31m"<<messages<<std::endl;
      }
@@ -134,16 +134,14 @@ void renderTables(int tableArray[3][3][3][3],int filledPositions[],int filledCel
             std::cout<<"  ";
             for(int j=0;j<3;j++){
                 for(int l=0; l<3;l++){
-                   // colcounter=colcounter+1;
-                    //is cell is zero display empty space
-                    //colcounter=3*j+l;
+                    //if cell is zero, display empty space
                     if (tableArray[i][j][k][l]==0 && colcounter%3==0){
                         std::cout<<"\033[1;33m   |  ";
                     }
                     if (tableArray[i][j][k][l]==0 && colcounter%3!=0){
                         std::cout<<"\033[1;30m   |  ";
                     } 
-                    //if cell value ot empty
+                    //if cell value is not empty
                     int selectedPosition= 27*i+9*k+3*j+l;
                     
                     if(checkSelectedPosition(selectedPosition,filledPositions,filledCells)){
@@ -152,14 +150,14 @@ void renderTables(int tableArray[3][3][3][3],int filledPositions[],int filledCel
                         
                             std::cout<<"\033[1;34m"<< tableArray[i][j][k][l]<<"\033[1;33m  |  ";
                             } 
-                            if( tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && colcounter%3==0 && colcounter<2){
+                            if( tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && colcounter%3==0 && colcounter<=2){
                         
                             std::cout<<"\033[1;34m"<< tableArray[i][j][k][l]<<"\033[1;33m  |  ";
                             } 
                             if(tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && colcounter%3!=0 && colcounter>2){
                             std::cout<<"\033[1;34m"<< tableArray[i][j][k][l]<<"\033[0m  |  ";   
                             }  
-                            if(tableArray[i][j][k][l]<=9 && tableArray[i][j][k][l]>0 && colcounter%3!=0 && colcounter<2){
+                            if(tableArray[i][j][k][l]<=9 && tableArray[i][j][k][l]>0 && colcounter%3!=0 && colcounter<=2){
                             std::cout<<"\033[1;34m"<< tableArray[i][j][k][l]<<"\033[0m  |  ";   
                             } 
                     } else {
@@ -167,14 +165,14 @@ void renderTables(int tableArray[3][3][3][3],int filledPositions[],int filledCel
                         
                             std::cout<<"\033[1;31m"<< tableArray[i][j][k][l]<<"\033[1;33m  |  ";
                             } 
-                             if( tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && colcounter%3==0 && colcounter<2){
+                             if( tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && colcounter%3==0 && colcounter<=2){
                         
                             std::cout<<"\033[1;31m"<< tableArray[i][j][k][l]<<"\033[1;33m  |  ";
                             } 
                             if(tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && colcounter%3!=0 && colcounter>2){
                             std::cout<<"\033[1;31m"<< tableArray[i][j][k][l]<<"\033[0m  |  ";   
                             }  
-                             if(tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && colcounter%3!=0 && colcounter<2){
+                             if(tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && colcounter%3!=0 && colcounter<=2){
                             std::cout<<"\033[1;31m"<< tableArray[i][j][k][l]<<"\033[0m  |  ";   
                             } 
                     }
