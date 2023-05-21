@@ -3,6 +3,8 @@
 #include<cstdlib>
 #include<algorithm>
 #include<string>
+#include<iomanip>
+#include<cctype>
 int generateNumberofFilledCells();
 void generateFilledPositions(int (&filledPositions)[],const int filledCells);
 
@@ -15,9 +17,10 @@ bool isgameWon(int tableArray[3][3][3][3]);
 
 int main(){
 int tableArray[3][3][3][3];
-int selectedPos=0,selectedPosition=0,selectedValue=0;
+int selectedPos=0,selectedValue=0;
+int selectedPosition=0;
 std::string messages;
-
+system("CLS");
 //intialize the array
 for(int i=0; i<3;i++){
         for(int j=0;j<3;j++){
@@ -35,25 +38,26 @@ int filledPositions[filledCells];
 generateFilledPositions(filledPositions,filledCells);
 populateInitialCells(tableArray,filledCells,filledPositions);
 renderTables(tableArray,filledPositions,filledCells);
-
 //Prompt users for input
-  std::cout<<std::endl<<"first three elements are: "<<tableArray[0][0][0][0]<<", "<<tableArray[0][0][0][1]<<", "<<tableArray[0][0][0][2]<<std::endl;
-do{ if (messages!=""){
+do{ 
+    if (messages!=""){
      std::cout<<std::endl<<"\033[1;31m"<<messages<<std::endl;
      }
     std::cout<<"\033[1;32m Press ctrl+c to exit"<<std::endl;
-    std::cout<<"\033[1;32m Choose the cell to change: ";
-    std::cin>>selectedPosition;
+    do{
+        std::cout<<"\033[1;32m Choose the cell to change: ";
+        std::cin>>selectedPosition;}while(selectedPosition>80 || selectedPosition<0);
     std::cout<<"Choose the value you would to insert: ";
     std::cin>>selectedValue;
+
     if(checkSelectedPosition(selectedPosition,filledPositions,filledCells)){
        receiveInput(tableArray,selectedPosition,selectedValue,messages);
     }else {
         messages = "Cell not available!";
      }
-    //system("CLS");
+    system("CLS");
     renderTables(tableArray,filledPositions,filledCells);
-} while( selectedPosition!=90  && isgameWon(tableArray)==false);
+} while(isgameWon(tableArray)==false);
 
 if(isgameWon(tableArray)){
     std::cout<<std::endl<<"CONGRATULATIONS, YOU HAVE SUCCESSFULLY COMPLETED THE GAME!"<<std::endl;
@@ -126,8 +130,8 @@ int pos=0;
 //===============================================================================================================================
 
 void renderTables(int tableArray[3][3][3][3],int filledPositions[],int filledCells){
-        std::cout<<"\n\033[1;33m========================================================";
-        std::cout<<"                ======================================================== "<<std::endl;
+        std::cout<<"\n\033[1;33m=========================================================";
+        std::cout<<"               ============================================================ "<<std::endl;
     int counter=0,colcounter=0;
     for(int i=0; i<3;i++){
         for(int k=0;k<3;k++){
@@ -135,10 +139,10 @@ void renderTables(int tableArray[3][3][3][3],int filledPositions[],int filledCel
             for(int j=0;j<3;j++){
                 for(int l=0; l<3;l++){
                     //if cell is zero, display empty space
-                    if (tableArray[i][j][k][l]==0 && colcounter%3==0){
+                    if (tableArray[i][j][k][l]==0 && (colcounter-2)%3==0){
                         std::cout<<"\033[1;33m   |  ";
                     }
-                    if (tableArray[i][j][k][l]==0 && colcounter%3!=0){
+                    if (tableArray[i][j][k][l]==0 && (colcounter-2)%3!=0){
                         std::cout<<"\033[1;30m   |  ";
                     } 
                     //if cell value is not empty
@@ -146,67 +150,67 @@ void renderTables(int tableArray[3][3][3][3],int filledPositions[],int filledCel
                     
                     if(checkSelectedPosition(selectedPosition,filledPositions,filledCells)){
                     
-                            if( tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && colcounter%3==0 && colcounter>2){
+                            if( tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && (colcounter-2)%3==0 && colcounter>=2){
                         
                             std::cout<<"\033[1;34m"<< tableArray[i][j][k][l]<<"\033[1;33m  |  ";
                             } 
-                            if( tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && colcounter%3==0 && colcounter<=2){
+                            if( tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && (colcounter-2)%3==0 && colcounter<2){
                         
                             std::cout<<"\033[1;34m"<< tableArray[i][j][k][l]<<"\033[1;33m  |  ";
                             } 
-                            if(tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && colcounter%3!=0 && colcounter>2){
+                            if(tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && (colcounter-2)%3!=0 && colcounter>=2){
                             std::cout<<"\033[1;34m"<< tableArray[i][j][k][l]<<"\033[0m  |  ";   
                             }  
-                            if(tableArray[i][j][k][l]<=9 && tableArray[i][j][k][l]>0 && colcounter%3!=0 && colcounter<=2){
+                            if(tableArray[i][j][k][l]<=9 && tableArray[i][j][k][l]>0 && (colcounter-2)%3!=0 && colcounter<2){
                             std::cout<<"\033[1;34m"<< tableArray[i][j][k][l]<<"\033[0m  |  ";   
                             } 
                     } else {
-                         if( tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && colcounter%3==0 && colcounter>2){
+                         if( tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && (colcounter-2)%3==0 && colcounter>=2){
                         
                             std::cout<<"\033[1;31m"<< tableArray[i][j][k][l]<<"\033[1;33m  |  ";
                             } 
-                             if( tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && colcounter%3==0 && colcounter<=2){
+                             if( tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && (colcounter-2)%3==0 && colcounter<2){
                         
                             std::cout<<"\033[1;31m"<< tableArray[i][j][k][l]<<"\033[1;33m  |  ";
                             } 
-                            if(tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && colcounter%3!=0 && colcounter>2){
+                            if(tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && (colcounter-2)%3!=0 && colcounter>=2){
                             std::cout<<"\033[1;31m"<< tableArray[i][j][k][l]<<"\033[0m  |  ";   
                             }  
-                             if(tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && colcounter%3!=0 && colcounter<=2){
+                             if(tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && (colcounter-2)%3!=0 && colcounter<2){
                             std::cout<<"\033[1;31m"<< tableArray[i][j][k][l]<<"\033[0m  |  ";   
                             } 
                     }
                      colcounter=colcounter+1;
                 }   
             }
+            //render the dispaly table
                      counter=counter+1;
                     if(counter%3==0 && counter>1){
-                        std::cout<<"\033[1;30m                 ";
+                        std::cout<<"\033[1;30m                ";
                        if(checkSelectedPosition(colcounter-9,filledPositions,filledCells)){
-                           std::cout<<"\033[1;32m"<<colcounter-9<<"  |  ";
+                           std::cout<<"\033[1;32m"<<std::setw(2)<<std::setfill('0')<<(colcounter-9)<<"\033[1;30m  |  ";
                        }else{
-                        std::cout<<"\033[1;30m"<<colcounter-9<<"\033[1;30m  |  ";
+                        std::cout<<"\033[1;30m"<<std::setw(2)<<colcounter-9<<"\033[1;30m  |  ";
                        }
                         if(checkSelectedPosition(colcounter-8,filledPositions,filledCells)){
-                          std::cout<<"\033[1;32m"<<colcounter-8<<"\033[1;30m  |  ";  
+                          std::cout<<"\033[1;32m"<<std::setw(2)<<std::setfill('0')<<colcounter-8<<"\033[1;30m  |  ";  
                         }else{
-                            std::cout<<"\033[1;30m"<<colcounter-8<<"\033[1;30m  |  ";  
+                            std::cout<<"\033[1;30m"<<std::setw(2)<<colcounter-8<<"\033[1;30m  |  ";  
                         }
-                        //std::cout<<colcounter-8<<"  |  ";
                         if(checkSelectedPosition(colcounter-7,filledPositions,filledCells)){
-                             std::cout<<"\033[1;32m"<<colcounter-7<<"\033[1;33m |  "<<"\033[1;30m";
+                             std::cout<<"\033[1;32m"<<std::setw(2)<<std::setfill('0')<<colcounter-7<<"\033[1;33m  |  "<<"\033[1;30m";
                          }else{
-                            std::cout<<"\033[1;30m"<<colcounter-7<<"\033[1;33m |  "<<"\033[1;30m";
+                            std::cout<<"\033[1;30m"<<std::setw(2)<<std::setfill('0')<<colcounter-7<<"\033[1;33m  |  "<<"\033[1;30m";
                         }
                          if(checkSelectedPosition(colcounter-6,filledPositions,filledCells)){
-                            std::cout<<"\033[1;32m"<<colcounter-6<<"\033[1;30m  |  ";
+                            std::cout<<"\033[1;32m"<<std::setw(2)<<std::setfill('0')<<colcounter-6<<"\033[1;30m  |  ";
                          }else{
-                             std::cout<<"\033[1;30m"<<colcounter-6<<"\033[1;30m  |  ";
+                             std::cout<<"\033[1;30m"<<std::setw(2)<<std::setfill('0')<<colcounter-6<<"\033[1;30m  |  ";
                          }
                          if(checkSelectedPosition(colcounter-5,filledPositions,filledCells)){
-                            std::cout<<"\033[1;32m"<<colcounter-5<<"  |  ";
+                            std::cout<<"\033[1;32m"<<std::setw(2)<<std::setfill('0')<<colcounter-5<<"\033[1;30m  |  ";
                         }else{
-                             std::cout<<"\033[1;30m"<<colcounter-5<<"  |  ";
+                             std::cout<<"\033[1;30m"<<std::setw(2)<<colcounter-5<<"  |  ";
                         }
                         if(checkSelectedPosition(colcounter-4,filledPositions,filledCells)){
                             std::cout<<"\033[1;32m"<<colcounter-4<<"\033[1;33m  |  "<<"\033[1;30m";
@@ -214,74 +218,73 @@ void renderTables(int tableArray[3][3][3][3],int filledPositions[],int filledCel
                             std::cout<<"\033[1;30m"<<colcounter-4<<"\033[1;33m  |  "<<"\033[1;30m";
                          }
                          if(checkSelectedPosition(colcounter-3,filledPositions,filledCells)){
-                             std::cout<<"\033[1;32m"<<colcounter-3<<"  |  ";
+                             std::cout<<"\033[1;32m"<<colcounter-3<<"\033[1;30m  |  ";
                         }else{
                              std::cout<<"\033[1;30m"<<colcounter-3<<"\033[1;30m  |  ";
                         }
                          if(checkSelectedPosition(colcounter-2,filledPositions,filledCells)){
-                            std::cout<<"\033[1;32m"<<colcounter-2<<" | ";
+                            std::cout<<"\033[1;32m"<<colcounter-2<<"\033[1;30m  |  ";
                            }else{
-                             std::cout<<"\033[1;30m"<<colcounter-2<<"\033[1;30m | ";
+                             std::cout<<"\033[1;30m"<<colcounter-2<<"\033[1;30m  |  ";
                            }
                         if(checkSelectedPosition(colcounter-1,filledPositions,filledCells)){
-                           std::cout<<"\033[1;32m"<<colcounter-1<<"\033[1;33m | "<<std::endl;
+                           std::cout<<"\033[1;32m"<<colcounter-1<<"\033[1;33m  |  "<<std::endl;
                          }else{
-                           std::cout<<"\033[1;30m"<<colcounter-1<<"\033[1;33m | "<<std::endl;
+                           std::cout<<"\033[1;30m"<<colcounter-1<<"\033[1;33m  |  "<<std::endl;
                          }
                         std::cout<<"\033[1;33m"<<"=========================================================";
-                        std::cout<<"               ========================================================"<<std::endl;
+                        std::cout<<"               ==========================================================="<<std::endl;
                     }else{
                          
                        std::cout<<"\033[1;30m                "; 
                        if(checkSelectedPosition(colcounter-9,filledPositions,filledCells)){
-                            std::cout<<"\033[1;32m"<<colcounter-9<<"  |  "; 
+                            std::cout<<"\033[1;32m"<<std::setw(2)<<std::setfill('0')<<colcounter-9<<"\033[1;30m  |  "; 
                        }else{
-                                std::cout<<"\033[1;30m"<<colcounter-9<<"  |  "; 
+                                std::cout<<"\033[1;30m"<<std::setw(2)<<std::setfill('0')<<colcounter-9<<"  |  "; 
                     
                          }
                        if(checkSelectedPosition(colcounter-8,filledPositions,filledCells)){
-                            std::cout<<"\033[1;32m"<< colcounter-8<<"  |  ";
+                            std::cout<<"\033[1;32m"<<std::setw(2)<<std::setfill('0')<< colcounter-8<<"\033[1;30m  |  ";
                        }else{ 
-                            std::cout<<"\033[1;30m"<<colcounter-8<<"  |  "; 
+                            std::cout<<"\033[1;30m"<<std::setw(2)<<std::setfill('0')<<colcounter-8<<"  |  "; 
                          }
                        if(checkSelectedPosition(colcounter-7,filledPositions,filledCells)){
-                            std::cout<<"\033[1;32m"<<colcounter-7<<"\033[1;33m |  "<<"\033[1;30m"; 
+                            std::cout<<"\033[1;32m"<<std::setw(2)<<std::setfill('0')<<colcounter-7<<"\033[1;33m  |  "<<"\033[1;30m"; 
                        }else{
-                            std::cout<<"\033[1;30m"<<colcounter-7<<"\033[1;33m |  "<<"\033[1;30m";  
+                            std::cout<<"\033[1;30m"<<std::setw(2)<<std::setfill('0')<<colcounter-7<<"\033[1;33m  |  "<<"\033[1;30m";  
                          }
                        if(checkSelectedPosition(colcounter-6,filledPositions,filledCells)){
-                            std::cout<<"\033[1;32m"<<colcounter-6<<"  |  "; 
-                       }else{ std::cout<<"\033[1;30m"<<colcounter-6<<"  |  "; 
+                            std::cout<<"\033[1;32m"<<std::setw(2)<<std::setfill('0')<<colcounter-6<<"\033[1;30m  |  "; 
+                       }else{ std::cout<<"\033[1;30m"<<std::setw(2)<<std::setfill('0')<<colcounter-6<<"  |  "; 
                          }
                        if(checkSelectedPosition(colcounter-5,filledPositions,filledCells)){
-                             std::cout<<"\033[1;32m"<<colcounter-5<<"  |  ";
+                             std::cout<<"\033[1;32m"<<std::setw(2)<<std::setfill('0')<<colcounter-5<<"\033[1;30m  |  ";
                        }else{ 
-                         std::cout<<"\033[1;30m"<<colcounter-5<<"  |  "; 
+                         std::cout<<"\033[1;30m"<<std::setw(2)<<std::setfill('0')<<colcounter-5<<"  |  "; 
                          }
                        if(checkSelectedPosition(colcounter-4,filledPositions,filledCells)){
-                            std::cout<<"\033[1;32m"<<colcounter-4<<"\033[1;33m  |  "<<"\033[1;30m"; 
+                            std::cout<<"\033[1;32m"<<std::setw(2)<<std::setfill('0')<<colcounter-4<<"\033[1;33m  |  "<<"\033[1;30m"; 
                        }else{
-                            std::cout<<"\033[1;30m"<<colcounter-4<<"\033[1;33m  |  "<<"\033[1;30m";
+                            std::cout<<"\033[1;30m"<<std::setw(2)<<std::setfill('0')<<colcounter-4<<"\033[1;33m  |  "<<"\033[1;30m";
                          }
                        if(checkSelectedPosition(colcounter-3,filledPositions,filledCells)){
-                            std::cout<<"\033[1;32m"<<colcounter-3<<"  |  "; 
+                            std::cout<<"\033[1;32m"<<std::setw(2)<<std::setfill('0')<<colcounter-3<<"\033[1;30m  |  "; 
                        }else{
-                            std::cout<<"\033[1;30m"<<colcounter-3<<"  |  "; 
+                            std::cout<<"\033[1;30m"<<std::setw(2)<<std::setfill('0')<<colcounter-3<<"  |  "; 
                          }
                        if(checkSelectedPosition(colcounter-2,filledPositions,filledCells)){
-                           std::cout<<"\033[1;32m"<<colcounter-2<<" | "; 
+                           std::cout<<"\033[1;32m"<<std::setw(2)<<std::setfill('0')<<colcounter-2<<"\033[1;30m  |  "; 
                        }else{
-                        std::cout<<"\033[1;30m"<<colcounter-2<<"  |  "; 
+                        std::cout<<"\033[1;30m"<<std::setw(2)<<std::setfill('0')<<colcounter-2<<"  |  "; 
                          }
                        if(checkSelectedPosition(colcounter-1,filledPositions,filledCells)){
-                       std::cout<<"\033[1;32m"<<colcounter-1<<"\033[1;33m | "<<std::endl;
+                       std::cout<<"\033[1;32m"<<std::setw(2)<<std::setfill('0')<<colcounter-1<<"\033[1;33m  |  "<<std::endl;
                        }else{
-                        std::cout<<"\033[1;30m"<<colcounter-1<<"\033[1;33m | "<<std::endl;
+                        std::cout<<"\033[1;30m"<<std::setw(2)<<std::setfill('0')<<colcounter-1<<"\033[1;33m  |  "<<std::endl;
                         }
                    std::cout<<"\033[1;30m---------------------------------------------------------";
-                   std::cout<<"                 ----------------------------------------------------"<<std::endl;
-                    } 
-                    // counter=counter+1; 
+                   std::cout<<"                 ----------------------------------------------------------"<<std::endl;
+                    }  
         } 
                 }  
   
