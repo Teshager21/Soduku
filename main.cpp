@@ -37,6 +37,7 @@ populateInitialCells(tableArray,filledCells,filledPositions);
 renderTables(tableArray,filledPositions,filledCells);
 
 //Prompt users for input
+  std::cout<<std::endl<<"first two elements are: "<<tableArray[0][0][0][0]<<", "<<tableArray[0][0][0][1]<<std::endl;
 do{ if (messages!=""){
      std::cout<<std::endl<<"\033[1;31m"<<messages<<std::endl;
      }
@@ -50,13 +51,14 @@ do{ if (messages!=""){
     }else {
         messages = "Cell not available!";
      }
-    system("CLS");
+    //system("CLS");
     renderTables(tableArray,filledPositions,filledCells);
 } while( selectedPosition!=90  && isgameWon(tableArray)==false);
 
 if(isgameWon(tableArray)){
     std::cout<<std::endl<<"CONGRATULATIONS, YOU HAVE SUCCESSFULLY COMPLETED THE GAME!"<<std::endl;
 }
+
 }
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -69,7 +71,7 @@ int filledCells= rand()%11+30;
 return filledCells;
 }
 
-//===================================================================================
+//==============================================================================================================================
 
 void generateFilledPositions(int (&filledPositions)[],const int filledCells){
     srand(time(NULL));
@@ -77,7 +79,7 @@ void generateFilledPositions(int (&filledPositions)[],const int filledCells){
 for( int i=0; i<filledCells;i++){
    
     int randPos= rand()%81;
-    //check if the value already exists and repeate the loop step and try again if it does
+    //check if the value already exists and repeat the loop step and try again if it does
     int* begin =filledPositions;
     int* end = filledPositions + filledCells/sizeof(int);
     auto ptr=std::find(begin,end,randPos);
@@ -90,7 +92,7 @@ for( int i=0; i<filledCells;i++){
 
 }
 
-//======================================================================================
+//================================================================================================================
 
 void populateInitialCells(int (&tableArray)[3][3][3][3],const int filledCells,int filledPositions[]){
  srand(time(NULL));
@@ -132,33 +134,51 @@ void renderTables(int tableArray[3][3][3][3],int filledPositions[],int filledCel
             std::cout<<"  ";
             for(int j=0;j<3;j++){
                 for(int l=0; l<3;l++){
-                    colcounter=colcounter+1;
+                   // colcounter=colcounter+1;
+                    //is cell is zero display empty space
+                    //colcounter=3*j+l;
                     if (tableArray[i][j][k][l]==0 && colcounter%3==0){
                         std::cout<<"\033[1;33m   |  ";
                     }
                     if (tableArray[i][j][k][l]==0 && colcounter%3!=0){
                         std::cout<<"\033[1;30m   |  ";
                     } 
+                    //if cell value ot empty
                     int selectedPosition= 27*i+9*k+3*j+l;
-
+                    
                     if(checkSelectedPosition(selectedPosition,filledPositions,filledCells)){
                     
                             if( tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && colcounter%3==0 && colcounter>2){
                         
                             std::cout<<"\033[1;34m"<< tableArray[i][j][k][l]<<"\033[1;33m  |  ";
                             } 
+                            if( tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && colcounter%3==0 && colcounter<2){
+                        
+                            std::cout<<"\033[1;34m"<< tableArray[i][j][k][l]<<"\033[1;33m  |  ";
+                            } 
                             if(tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && colcounter%3!=0 && colcounter>2){
                             std::cout<<"\033[1;34m"<< tableArray[i][j][k][l]<<"\033[0m  |  ";   
                             }  
+                            if(tableArray[i][j][k][l]<=9 && tableArray[i][j][k][l]>0 && colcounter%3!=0 && colcounter<2){
+                            std::cout<<"\033[1;34m"<< tableArray[i][j][k][l]<<"\033[0m  |  ";   
+                            } 
                     } else {
                          if( tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && colcounter%3==0 && colcounter>2){
+                        
+                            std::cout<<"\033[1;31m"<< tableArray[i][j][k][l]<<"\033[1;33m  |  ";
+                            } 
+                             if( tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && colcounter%3==0 && colcounter<2){
                         
                             std::cout<<"\033[1;31m"<< tableArray[i][j][k][l]<<"\033[1;33m  |  ";
                             } 
                             if(tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && colcounter%3!=0 && colcounter>2){
                             std::cout<<"\033[1;31m"<< tableArray[i][j][k][l]<<"\033[0m  |  ";   
                             }  
+                             if(tableArray[i][j][k][l]<=9 &&tableArray[i][j][k][l]>0 && colcounter%3!=0 && colcounter<2){
+                            std::cout<<"\033[1;31m"<< tableArray[i][j][k][l]<<"\033[0m  |  ";   
+                            } 
                     }
+                     colcounter=colcounter+1;
                 }   
             }
                      counter=counter+1;
@@ -262,11 +282,12 @@ void renderTables(int tableArray[3][3][3][3],int filledPositions[],int filledCel
                         }
                    std::cout<<"\033[1;30m---------------------------------------------------------";
                    std::cout<<"                 ----------------------------------------------------"<<std::endl;
-                    }  
+                    } 
+                    // counter=counter+1; 
         } 
-                }    
+                }  
+  
             }
-//}
 
 //==============================================================================================================================
 
